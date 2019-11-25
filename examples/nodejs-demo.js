@@ -91,9 +91,106 @@ else {
 	var exportName = 'PptxGenJS_Demo_Node_'+getTimestamp();
 	var pptx = new PptxGenJS();
 	var slide = pptx.addNewSlide();
-	slide.addText( 'New Node Presentation', {x:1.5, y:1.5, w:6, h:2, margin:0.1, fill:'FFFCCC'} );
+
+	/**
+            "ffffff",
+            "dbf0fa",
+            "91cff2",
+            "1c87c4",
+            "ece25b",
+            "faaf19",
+            "c62424"
+	 */
+	var zips = {
+		"primary": [
+			{
+				zip: "32235",
+				color: "c62424",
+				volume: 6,
+				percent: 0.3
+			},
+			{
+				zip: "32835",
+				color: "1c87c4",
+				volume: 5,
+				percent: 0.25
+			},
+			{
+				zip: "32435",
+				color: "ece25b",
+				volume: 4,
+				percent: 0.2
+			}
+		],
+
+		"secondary": [
+			{
+				zip: "32735",
+				color: "91cff2",
+				volume: 3,
+				percent: 0.15
+			}
+		],
+		"other": [
+			{
+				zip: "35235",
+				color: "ffffff",
+				volume: 1,
+				percent: 0.05
+			}
+		]
+	};
+
+	// rows for primary table
+	var primary = zips["primary"];
+	var primaryRows = [];
+	primary.forEach(zip => {
+		primaryRows.push([
+			{
+				text: "\u25A0", // square
+				options: {
+					color: zip.color,
+					fontSize: 14,
+					valign: "top"
+				}
+			},
+			{
+				text: zip.zip
+			},
+			{
+				text: zip.volume
+			},
+			{
+				text: zip.percent
+			}
+		]);
+	});
+
+	var headerRow = [
+		{ text: "", options: { bold: true } }, // empty cell for the heatmap color
+		{ text: "ZIP Codes", options: { bold: true } },
+		{ text: "Sales", options: { bold: true } },
+		{ text: "% of Sales", options: { bold: true } }
+	];
+
+	var rows = [
+		headerRow,
+		...primaryRows // spread operator required to get the rows/arrays themselves, rather than an array of arrays
+	];
+
+	console.log(rows);
+
+	
+	slide.addTable(rows, { border: "none", valign: "middle", colW: [0.25, 2.0, 1.0, 1.0] });
+
+
+	// slide.addTable( [ [{ text:'Simple Example', options:optsTitle }] ], { x:0.5, y:0.13, w:12.5 } );
+		
+
+	// Original example
+	// slide.addText( 'New Node Presentation', {x:1.5, y:1.5, w:6, h:2, margin:0.1, fill:'FFFCCC'} );
 	// Test that `pptxgen.shapes.js` was loaded/is available
-	slide.addShape(pptx.shapes.OVAL_CALLOUT, { x:6, y:2, w:3, h:2, fill:'00FF00', line:'000000', lineSize:1 });
+	// slide.addShape(pptx.shapes.OVAL_CALLOUT, { x:6, y:2, w:3, h:2, fill:'00FF00', line:'000000', lineSize:1 });
 
 	// **NOTE**: Only uncomment one EXAMPLE at a time
 
